@@ -1,0 +1,5 @@
+<ear destfile="${dist.dir}/${ant.project.name}.ear" 
+  appxml="${conf.dir}/application.xml">
+  <metainf dir="${build.dir/META-INF}"/>
+  <fileset dir="${dist.dir}" includes="*.jar,*.war"/>
+</ear>

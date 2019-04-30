@@ -1,0 +1,18 @@
+stages:
+   - Building & migration
+
+build:
+  stage: Building & migration
+  commands:
+     - cd MyApplication
+     - ant -f build.xml
+     - ls dist/lib
+
+pre-build:
+  script:
+    - ls
+
+post-build:
+  script:
+    - ls -la
+

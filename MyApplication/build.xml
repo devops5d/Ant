@@ -1,0 +1,52 @@
+<project name="MyApplication" default="archive" basedir=".">
+
+    <property file = "build.properties"/>
+    <description>
+        simplest example build file
+    </description>
+    <!-- set global properties for this build -->
+    <property name="src" location="src" />
+    <property name="build" location="build" />
+    <property name="dist" location="dist" />
+    <property name="conf" location="conf" />
+    <property name="version" value="1.0" />
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp />
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}/META-INF" />
+        <mkdir dir="${conf}" />
+    </target>
+
+    <target name="compile" depends="init" description="compile the source">
+        <!-- Compile the java code from ${  src} into ${build} -->
+        <javac srcdir="${src}" destdir="${build}" />
+    </target>
+
+    <target name="main" depends="compile" description="create the Main JAR file">
+        <buildnumber />
+        <mkdir dir="${dist}/lib" />
+        <!-- Put everything in ${build} into the Main-${version}.${build.number}.jar -->
+        <jar destfile="${dist}/lib/Main-${version}.${build.number}.jar" basedir="${build}" excludes = "com/**"/>
+    </target>
+
+    <target name="dist" depends="compile, main" description="generate the distribution">
+        <buildnumber />
+        <!-- Put everything in ${build} into the MyApplication-${version}.${build.number}.jar -->
+        <jar destfile="${dist}/lib/MyApplication-${version}.${build.number}.jar" basedir="${build}" excludes = "**/Main.class" />
+    </target>
+
+    <target name="archive" depends="dist" description="Enterprise archive file">
+        <ear destfile="${dist}/lib/MyApplication-${version}.${build.number}.ear" appxml="${conf}/application.xml">
+            <metainf dir="${build}/META-INF"/>
+            <fileset dir="${dist}/lib" includes="*.jar,*.war"/>
+        </ear>
+    </target>
+
+    <target name="clean" description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}" />
+        <delete dir="${dist}" />
+    </target>
+</project>
